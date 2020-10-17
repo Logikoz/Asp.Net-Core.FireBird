@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -24,12 +25,12 @@ namespace FireBird.API.Controllers
 
 		// POST: api/Cars
 		[HttpPost]
-		public async Task<ActionResult<CarModel>> CreateCardAsync(CarModel carModel)
+		public async Task<ActionResult<CarModel>> CreateCardAsync([FromBody] CarModel carModel)
 		{
 			_context.Cars.Add(carModel);
 			await _context.SaveChangesAsync();
 
-			return Created($"api/car", carModel);
+			return Created("api/car", carModel);
 		}
 
 		// GET: api/Cars
@@ -40,10 +41,10 @@ namespace FireBird.API.Controllers
 		}
 
 		// GET: api/Cars/5
-		[HttpGet("{id}")]
-		public async Task<ActionResult<CarModel>> GetCarAsync(Guid id)
+		[HttpGet("{carId?}")]
+		public async Task<ActionResult<CarModel>> GetCarAsync([Required] Guid? carId)
 		{
-			CarModel carModel = await _context.Cars.SingleOrDefaultAsync(car => car.CarId == id);
+			CarModel carModel = await _context.Cars.SingleOrDefaultAsync(car => car.CarId == carId);
 
 			if (carModel is null)
 				return NotFound();
@@ -52,38 +53,31 @@ namespace FireBird.API.Controllers
 		}
 
 		// PUT: api/Cars/5
-		[HttpPut("{id}")]
-		public async Task<IActionResult> UpdateCarAsync(Guid id, [FromBody] CarModel carModel)
+		[HttpPut("{carId?}")]
+		public async Task<IActionResult> UpdateCarAsync([Required] Guid? carId, [FromBody] CarModel newData)
 		{
-			if (id != carModel.CarId)
+			if (carId != newData.CarId)
 				return BadRequest();
 
-			_context.Entry(carModel).State = EntityState.Modified;
+			_context.Entry(newData).State = EntityState.Modified;
 
 			try
 			{
 				await _context.SaveChangesAsync();
 			}
-			catch (DbUpdateConcurrencyException)
+			catch (DbUpdateConcurrencyException e)
 			{
-				if (!_context.Cars.Any(e => e.CarId == id))
-				{
-					return NotFound();
-				}
-				else
-				{
-					throw;
-				}
+				return _context.Cars.Any(e => e.CarId == carId) ? throw e : NotFound();
 			}
 
-			return NoContent();
+			return Ok(newData);
 		}
 
 		// DELETE: api/Cars/5
-		[HttpDelete("{id}")]
-		public async Task<ActionResult<CarModel>> DeleteCarAsync(Guid id)
+		[HttpDelete("{carId?}")]
+		public async Task<ActionResult<CarModel>> DeleteCarAsync([Required] Guid? carId)
 		{
-			CarModel carModel = await _context.Cars.SingleOrDefaultAsync(car => car.CarId == id);
+			CarModel carModel = await _context.Cars.SingleOrDefaultAsync(car => car.CarId == carId);
 
 			if (carModel is null)
 				return NotFound();

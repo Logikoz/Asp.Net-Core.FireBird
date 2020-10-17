@@ -1,4 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using FireBird.API.Data;
+using FireBird.API.Models;
+
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 using System;
@@ -6,106 +9,84 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-using FireBird.API.Data;
-using FireBird.API.Models;
-
 namespace FireBird.API.Controllers
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class PersonsController : ControllerBase
-    {
-        private readonly DataContext _context;
+	[Route("api/[controller]")]
+	[ApiController]
+	public class PersonsController : ControllerBase
+	{
+		private readonly DataContext _context;
 
-        public PersonsController(DataContext context)
-        {
-            _context = context;
-        }
+		public PersonsController(DataContext context)
+		{
+			_context = context;
+		}
 
-        // GET: api/Persons
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<PersonModel>>> GetPersons()
-        {
-            return await _context.Persons.ToListAsync();
-        }
+		// POST: api/Persons
+		[HttpPost]
+		public async Task<ActionResult<PersonModel>> AddPersonAsync([FromBody] PersonModel newData)
+		{
+			_context.Persons.Add(newData);
+			await _context.SaveChangesAsync();
 
-        // GET: api/Persons/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<PersonModel>> GetPersonModel(Guid id)
-        {
-            var personModel = await _context.Persons.FindAsync(id);
+			return Created("api/persons", newData);
+		}
 
-            if (personModel == null)
-            {
-                return NotFound();
-            }
+		// GET: api/Persons
+		[HttpGet]
+		public async Task<ActionResult<IEnumerable<PersonModel>>> GetAllPersonsAsync()
+		{
+			return Ok(await _context.Persons.ToListAsync());
+		}
 
-            return personModel;
-        }
+		// GET: api/Persons/5
+		[HttpGet("{personId?}")]
+		public async Task<ActionResult<PersonModel>> GetPersonAsync(Guid? personId)
+		{
+			var personModel = await _context.Persons.SingleOrDefaultAsync(person => person.PersonId == personId);
 
-        // PUT: api/Persons/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for
-        // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutPersonModel(Guid id, PersonModel personModel)
-        {
-            if (id != personModel.PersonId)
-            {
-                return BadRequest();
-            }
+			if (personModel is null)
+				return NotFound();
 
-            _context.Entry(personModel).State = EntityState.Modified;
+			return Ok(personModel);
+		}
 
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!PersonModelExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
+		// PUT: api/Persons/5
+		[HttpPut("{personId?}")]
+		public async Task<IActionResult> UpdatePersonAsync(Guid? personId, [FromBody] PersonModel newData)
+		{
+			if (personId != newData.PersonId)
+				return BadRequest();
 
-            return NoContent();
-        }
+			_context.Entry(newData).State = EntityState.Modified;
 
-        // POST: api/Persons
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for
-        // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
-        [HttpPost]
-        public async Task<ActionResult<PersonModel>> PostPersonModel(PersonModel personModel)
-        {
-            _context.Persons.Add(personModel);
-            await _context.SaveChangesAsync();
+			try
+			{
+				await _context.SaveChangesAsync();
+			}
+			catch (DbUpdateConcurrencyException e)
+			{
+				return _context.Persons.Any(e => e.PersonId == personId) ? throw e : NotFound();
+			}
 
-            return CreatedAtAction("GetPersonModel", new { id = personModel.PersonId }, personModel);
-        }
+			return Ok(newData);
+		}
 
-        // DELETE: api/Persons/5
-        [HttpDelete("{id}")]
-        public async Task<ActionResult<PersonModel>> DeletePersonModel(Guid id)
-        {
-            var personModel = await _context.Persons.FindAsync(id);
-            if (personModel == null)
-            {
-                return NotFound();
-            }
+		// DELETE: api/Persons/5
+		[HttpDelete("{personId?}")]
+		public async Task<ActionResult<PersonModel>> DeletePersonAsync(Guid? personId)
+		{
+			var personModel = await _context.Persons.SingleOrDefaultAsync(person => person.PersonId == personId);
 
-            _context.Persons.Remove(personModel);
-            await _context.SaveChangesAsync();
+			if (personModel == null)
+			{
+				return NotFound();
+			}
 
-            return personModel;
-        }
+			_context.Persons.Remove(personModel);
+			await _context.SaveChangesAsync();
 
-        private bool PersonModelExists(Guid id)
-        {
-            return _context.Persons.Any(e => e.PersonId == id);
-        }
-    }
+			return NoContent();
+		}
+	}
 }
