@@ -9,6 +9,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 
+using System;
 using System.Text.Json;
 
 namespace FireBird.API
@@ -61,6 +62,8 @@ namespace FireBird.API
 
 			//app.UseHttpsRedirection();
 
+			app.UseStaticFiles();
+
 			app.UseRouting();
 
 			app.UseSwagger();
@@ -69,6 +72,7 @@ namespace FireBird.API
 			{
 				c.RoutePrefix = "docs";
 				c.SwaggerEndpoint("/swagger/v1/swagger.json", "FireBird API");
+				c.InjectJavascript("/docs/custom.js");
 			});
 
 			app.UseAuthorization();
