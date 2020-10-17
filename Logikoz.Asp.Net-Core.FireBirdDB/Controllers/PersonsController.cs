@@ -6,10 +6,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-using WebApplication1.Data;
-using WebApplication1.Models;
+using FireBird.API.Data;
+using FireBird.API.Models;
 
-namespace WebApplication1.Controllers
+namespace FireBird.API.Controllers
 {
 	[Route("api/[controller]")]
 	[ApiController]

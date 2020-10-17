@@ -3,15 +3,17 @@ using System;
 using FirebirdSql.EntityFrameworkCore.Firebird.Metadata;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using WebApplication1.Data;
+using FireBird.API.Data;
 
-namespace WebApplication1.Migrations
+namespace FireBird.API.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20201017175618_Init2")]
+    partial class Init2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -19,7 +21,7 @@ namespace WebApplication1.Migrations
                 .HasAnnotation("ProductVersion", "3.1.9")
                 .HasAnnotation("Relational:MaxIdentifierLength", 31);
 
-            modelBuilder.Entity("WebApplication1.Models.CarModel", b =>
+            modelBuilder.Entity("FireBird.API.Models.CarModel", b =>
                 {
                     b.Property<Guid>("CarId")
                         .ValueGeneratedOnAdd()
@@ -38,7 +40,7 @@ namespace WebApplication1.Migrations
                     b.ToTable("Cars");
                 });
 
-            modelBuilder.Entity("WebApplication1.Models.PersonModel", b =>
+            modelBuilder.Entity("FireBird.API.Models.PersonModel", b =>
                 {
                     b.Property<Guid>("PersonId")
                         .ValueGeneratedOnAdd()

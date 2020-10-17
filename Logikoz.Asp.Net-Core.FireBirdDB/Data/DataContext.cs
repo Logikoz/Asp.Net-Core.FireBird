@@ -1,8 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 
-using WebApplication1.Models;
+using FireBird.API.Models;
 
-namespace WebApplication1.Data
+namespace FireBird.API.Data
 {
 	public class DataContext : DbContext
 	{

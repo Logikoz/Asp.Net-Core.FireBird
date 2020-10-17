@@ -3,17 +3,15 @@ using System;
 using FirebirdSql.EntityFrameworkCore.Firebird.Metadata;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
-using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using WebApplication1.Data;
+using FireBird.API.Data;
 
-namespace WebApplication1.Migrations
+namespace FireBird.API.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20201017160502_Init")]
-    partial class Init
+    partial class DataContextModelSnapshot : ModelSnapshot
     {
-        protected override void BuildTargetModel(ModelBuilder modelBuilder)
+        protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -21,7 +19,26 @@ namespace WebApplication1.Migrations
                 .HasAnnotation("ProductVersion", "3.1.9")
                 .HasAnnotation("Relational:MaxIdentifierLength", 31);
 
-            modelBuilder.Entity("WebApplication1.Models.PersonModel", b =>
+            modelBuilder.Entity("FireBird.API.Models.CarModel", b =>
+                {
+                    b.Property<Guid>("CarId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("CHAR(16) CHARACTER SET OCTETS");
+
+                    b.Property<string>("Brand")
+                        .IsRequired()
+                        .HasColumnType("BLOB SUB_TYPE TEXT");
+
+                    b.Property<string>("Model")
+                        .IsRequired()
+                        .HasColumnType("BLOB SUB_TYPE TEXT");
+
+                    b.HasKey("CarId");
+
+                    b.ToTable("Cars");
+                });
+
+            modelBuilder.Entity("FireBird.API.Models.PersonModel", b =>
                 {
                     b.Property<Guid>("PersonId")
                         .ValueGeneratedOnAdd()

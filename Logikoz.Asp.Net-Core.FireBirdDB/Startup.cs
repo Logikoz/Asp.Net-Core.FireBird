@@ -5,9 +5,9 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
-using WebApplication1.Data;
+using FireBird.API.Data;
 
-namespace WebApplication1
+namespace FireBird.API
 {
 	public class Startup
 	{
