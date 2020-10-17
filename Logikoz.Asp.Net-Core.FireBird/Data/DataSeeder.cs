@@ -1,7 +1,7 @@
-﻿using System;
-using System.Linq;
+﻿using FireBird.API.Models;
 
-using FireBird.API.Models;
+using System;
+using System.Linq;
 
 namespace FireBird.API.Data
 {
@@ -17,21 +17,22 @@ namespace FireBird.API.Data
 		public void Init()
 		{
 			InitPersons();
+			InitCars();
 		}
 
-		//private void InitCars()
-		//{
-		//	if(_context.Cars.Count() <= 0)
-		//	{
-		//		_context.Cars.Add(new CarModel
-		//		{
-		//			Brand = "Gol",
-		//			Model = "1.0"
-		//		});
+		private void InitCars()
+		{
+			if (_context.Cars.Count() <= 0)
+			{
+				_context.Cars.Add(new CarModel
+				{
+					Brand = "Gol",
+					Model = "1.0"
+				});
 
-		//		_context.SaveChanges();
-		//	}
-		//}
+				_context.SaveChanges();
+			}
+		}
 
 		private void InitPersons()
 		{
@@ -42,7 +43,7 @@ namespace FireBird.API.Data
 					Name = "Maria Joana da Silva Santos",
 					CPF = "28629001097",
 					BirthDate = DateTime.Parse("2001-02-15"),
-					Height = 1.87
+					Heigth = 1.87
 				});
 
 				_context.SaveChanges();

@@ -25,7 +25,7 @@ namespace FireBird.API
 			services.AddDbContext<DataContext>(options =>
 			{
 				options.UseFirebird("database=localhost:test.fdb;user=sysdba;password=numsei",
-					o => o.MigrationsAssembly(typeof(DataContext).Assembly.FullName));
+				optionsBuilder => optionsBuilder.MigrationsAssembly(typeof(DataContext).Assembly.FullName));
 			});
 
 			services.AddScoped<DataSeeder>();

@@ -17,7 +17,7 @@ namespace FireBird.API.Models
 
 		[Required]
 		[Range(1.5, 2.3)]
-		public double Height { get; set; }
+		public double Heigth { get; set; }
 
 		[Required]
 		[MaxLength(11)]

@@ -1,6 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using FireBird.API.Models;
 
-using FireBird.API.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace FireBird.API.Data
 {
@@ -8,7 +8,7 @@ namespace FireBird.API.Data
 	{
 		public DbSet<PersonModel> Persons { get; set; }
 
-		//public DbSet<CarModel> Cars { get; set; }
+		public DbSet<CarModel> Cars { get; set; }
 
 		public DataContext()
 		{

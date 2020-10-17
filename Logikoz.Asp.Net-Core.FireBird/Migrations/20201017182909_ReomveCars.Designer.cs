@@ -4,39 +4,22 @@ using FireBird.API.Data;
 using FirebirdSql.EntityFrameworkCore.Firebird.Metadata;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace FireBird.API.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20201017182909_ReomveCars")]
+    partial class ReomveCars
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("Fb:ValueGenerationStrategy", FbValueGenerationStrategy.IdentityColumn)
                 .HasAnnotation("ProductVersion", "3.1.9")
                 .HasAnnotation("Relational:MaxIdentifierLength", 31);
-
-            modelBuilder.Entity("FireBird.API.Models.CarModel", b =>
-                {
-                    b.Property<Guid>("CarId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("CHAR(16) CHARACTER SET OCTETS");
-
-                    b.Property<string>("Brand")
-                        .IsRequired()
-                        .HasColumnType("BLOB SUB_TYPE TEXT");
-
-                    b.Property<string>("Model")
-                        .IsRequired()
-                        .HasColumnType("BLOB SUB_TYPE TEXT");
-
-                    b.HasKey("CarId");
-
-                    b.ToTable("Cars");
-                });
 
             modelBuilder.Entity("FireBird.API.Models.PersonModel", b =>
                 {
@@ -53,7 +36,7 @@ namespace FireBird.API.Migrations
                         .HasColumnType("VARCHAR(11)")
                         .HasMaxLength(11);
 
-                    b.Property<double>("Heigth")
+                    b.Property<double>("Height")
                         .HasColumnType("DOUBLE PRECISION");
 
                     b.Property<string>("Name")
