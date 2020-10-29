@@ -39,7 +39,7 @@ namespace FireBird.API
 				{
 					Version = "v1",
 					Title = "FireBird API",
-					Description = "Documentaçao da API"
+					Description = "Sample API Documentation"
 				});
 			});
 
@@ -68,11 +68,13 @@ namespace FireBird.API
 
 			app.UseSwagger();
 
+			const string docsPrefix = "api/docs";
+
 			app.UseSwaggerUI(c =>
 			{
-				c.RoutePrefix = "docs";
+				c.RoutePrefix = docsPrefix;
 				c.SwaggerEndpoint("/swagger/v1/swagger.json", "FireBird API");
-				c.InjectJavascript("/docs/custom.js");
+				c.InjectStylesheet("/docs/custom.css");
 			});
 
 			app.UseAuthorization();
@@ -90,7 +92,7 @@ namespace FireBird.API
 						Environment = env.EnvironmentName,
 						Name = fullName[0],
 						Version = fullName[1].Remove(0, 9),
-						Docs = $"{e.Request.Scheme}://{e.Request.Host}/docs"
+						Docs = $"{e.Request.Scheme}://{e.Request.Host}/{docsPrefix}"
 					}));
 				});
 			});
